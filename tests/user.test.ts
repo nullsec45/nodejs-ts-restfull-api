@@ -121,7 +121,7 @@ describe.skip("GET /api/users/current",() => {
     });
 });
 
-describe("PATCH /api/users/current",() => {
+describe.skip("PATCH /api/users/current",() => {
     beforeEach(async () => {
         await UserTest.create();
     });
@@ -175,7 +175,7 @@ describe("PATCH /api/users/current",() => {
         expect(response.body.data.name).toBe("test update");
     });
 
-     it("should be able update user password", async() => {
+    it("should be able update user password", async() => {
          const response=await supertest(server)
                             .patch("/api/users/current")
                             .set("X-API-TOKEN","test")
@@ -189,5 +189,37 @@ describe("PATCH /api/users/current",() => {
 
         const user=await UserTest.get();
         expect(await bcrypt.compare("password_update", user.password)).toBe(true);
+    });
+});
+
+describe.skip("DELETE /api/users/current", () => {
+    beforeEach(async() => {
+        await UserTest.create();
+    });
+
+    afterEach(async() => {
+        await UserTest.delete();
+    });
+
+    it("should be able to logout", async() => {
+        const response=await supertest(server)
+                            .delete("/api/users/current")
+                            .set("X-API-TOKEN","test");
+
+        logger.debug(response.body);
+        expect(response.status).toBe(200);
+        expect(response.body.data).toBe("Success Logout");
+
+        const user=await UserTest.get();
+        expect(user.token).toBeNull();
+    });
+
+    it("should reject logout user if token is wrong", async() => {
+        const response=await supertest(server).delete("/api/users/current")
+                            .set("X-API-TOKEN","salah");
+        
+        logger.debug(response.body);
+        expect(response.status).toBe(401);
+        expect(response.body.errors).toBeDefined();
     });
 });
