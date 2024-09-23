@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --runInBand tests/contact.test.ts"
+    "test": "jest --runInBand tests/address.test.ts"
   },
   "keywords": [],
   "author": "",
