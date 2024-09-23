@@ -68,3 +68,10 @@ export class ContactTest{
         return contact;
     }
 }
+
+export class AddressTest{
+     static async deleteAll(){
+        await prismaClient.address.deleteMany({});
+    }
+
+}
