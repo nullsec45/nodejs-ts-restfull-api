@@ -10,7 +10,6 @@ import { User } from "@prisma/client";
 import { prismaClient } from "../applications/database";
 import { logger } from "../applications/logger";
 import { ResponseError } from "../errors/response-error";
-import { UserValidation } from "../validations/user-validation";
 import { Pageable } from "../types/page";
 
 export class ContactService{
