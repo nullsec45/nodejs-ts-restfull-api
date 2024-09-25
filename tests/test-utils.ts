@@ -70,8 +70,37 @@ export class ContactTest{
 }
 
 export class AddressTest{
-     static async deleteAll(){
+    static async deleteAll(){
         await prismaClient.address.deleteMany({});
     }
 
+    static async create(){
+        const contact=await ContactTest.get();
+        await prismaClient.address.create({
+            data:{
+                contact_id:contact.id,
+                street:"Jalan Test",
+                city:"Kota Test",
+                province:"Provinsi Test",
+                country:"Indonesia",
+                postal_code:"11111"
+            }
+        });
+    }
+
+    static async get(){
+        const address=await prismaClient.address.findFirst({
+            where:{
+                contact:{
+                    username:"test"
+                }
+            }
+        });
+
+        if(!address){
+            throw new Error("Address is not found");
+        }
+
+        return address;
+    }
 }
