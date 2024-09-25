@@ -16,6 +16,11 @@ export type CreateAddressRequest={
     postal_code:string;
 }
 
+export type GetAddressRequest={
+    contact_id:number;
+    id:number;
+}
+
 export function toAddressResponse(address:AddressResponse):AddressResponse{
     return {
         id:address.id,
@@ -26,3 +31,6 @@ export function toAddressResponse(address:AddressResponse):AddressResponse{
         postal_code:address.postal_code
     }
 }
+
+
+
