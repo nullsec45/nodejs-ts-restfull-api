@@ -21,6 +21,21 @@ export type GetAddressRequest={
     id:number;
 }
 
+export type UpdateAddressRequest={
+    id:number;
+    contact_id:number
+    street?:string;
+    city?:string; 
+    province?:string;
+    country:string;
+    postal_code:string;
+}
+
+export type RemoveAddressRequest={
+    contact_id:number;
+    id:number;
+}
+
 export function toAddressResponse(address:AddressResponse):AddressResponse{
     return {
         id:address.id,
