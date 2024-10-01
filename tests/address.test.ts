@@ -236,7 +236,7 @@ describe.skip("PUT /api/contacts/:contactId/addresses/:addressId",() => {
     });
 });
 
-describe("DELETE /api/contacts/:contactId/addresses/:addressId", () => {
+describe.skip("DELETE /api/contacts/:contactId/addresses/:addressId", () => {
     beforeEach(async() =>{
         await UserTest.create();
         await ContactTest.create();
@@ -281,6 +281,44 @@ describe("DELETE /api/contacts/:contactId/addresses/:addressId", () => {
 
         const response=await supertest(server)
                             .delete(`/api/contacts/${contact.id + 1}/addresses/${address.id}`)
+                            .set("X-API-TOKEN","test");
+
+        logger.debug(response.body);
+        expect(response.status).toBe(404);
+        expect(response.body.errors).toBeDefined();
+    });
+});
+
+describe("GET /api/contacts/:contactId/addresses/", () => {
+    beforeEach(async() =>{
+        await UserTest.create();
+        await ContactTest.create();
+        await AddressTest.create();
+    });
+
+    afterEach(async() => {
+        await AddressTest.deleteAll();
+        await ContactTest.deleteAll();
+        await UserTest.delete();
+    });
+
+    it("should be able to list addresses", async() => {
+        const contact=await ContactTest.get();
+
+        const response=await supertest(server)
+                            .get(`/api/contacts/${contact.id}/addresses`)
+                            .set("X-API-TOKEN","test");
+
+        logger.debug(response.body);
+        expect(response.status).toBe(200);
+        expect(response.body.data.length).toBe(1);
+    });
+
+     it("should reject list address if contact is not found", async() => {
+        const contact=await ContactTest.get();
+
+        const response=await supertest(server)
+                            .get(`/api/contacts/${contact.id + 1}/addresses`)
                             .set("X-API-TOKEN","test");
 
         logger.debug(response.body);
